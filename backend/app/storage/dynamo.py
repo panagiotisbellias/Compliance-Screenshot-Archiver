@@ -4,7 +4,7 @@ import logging
 import time
 from dataclasses import dataclass
 from decimal import Decimal
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, Optional
 
 import boto3
 from boto3.dynamodb.conditions import Key
@@ -28,7 +28,7 @@ class CaptureData:
     s3_key: str
     artifact_type: str
     user_id: str
-    metadata: dict[str, Any] = None
+    metadata: Optional[dict[str, Any]] = None
 
 
 @dataclass
@@ -41,7 +41,7 @@ class ScheduleData:
     cron_expression: str
     artifact_type: str = "pdf"
     enabled: bool = True
-    metadata: dict[str, Any] = None
+    metadata: Optional[dict[str, Any]] = None
 
 
 def ddb() -> Any:
@@ -68,7 +68,7 @@ def table(name: str) -> Any:
 
 
 # Capture Operations
-def create_capture(data: CaptureData = None, **kwargs) -> dict[str, Any]:
+def create_capture(data: Optional[CaptureData] = None, **kwargs) -> dict[str, Any]:
     """
     Create a capture record in DynamoDB.
 
@@ -140,7 +140,7 @@ def get_capture(capture_id: str):
 def list_captures_by_user(
     user_id: str,
     limit: int = 50,
-    last_evaluated_key: dict[str, Any] = None,
+    last_evaluated_key: Optional[dict[str, Any]] = None,
 ) -> dict[str, Any]:
     """
     List captures for a specific user.
@@ -203,7 +203,7 @@ def get_capture_by_hash(sha256: str):
 
 
 # Schedule Operations
-def create_schedule(data: ScheduleData = None, **kwargs) -> dict[str, Any]:
+def create_schedule(data: Optional[ScheduleData] = None, **kwargs) -> dict[str, Any]:
     """
     Create a schedule record in DynamoDB.
 
@@ -276,7 +276,7 @@ def get_schedule(schedule_id: str):
 def list_schedules_by_user(
     user_id: str,
     limit: int = 50,
-    last_evaluated_key: dict[str, Any] = None,
+    last_evaluated_key: Optional[dict[str, Any]] = None,
 ) -> dict[str, Any]:
     """
     List schedules for a specific user.
@@ -401,7 +401,7 @@ def delete_schedule(schedule_id: str) -> bool:
         return False
 
 
-def delete_capture(capture_id: str, created_at: float = None) -> bool:
+def delete_capture(capture_id: str, created_at: Optional[float] = None) -> bool:
     """
     Delete a capture record.
 

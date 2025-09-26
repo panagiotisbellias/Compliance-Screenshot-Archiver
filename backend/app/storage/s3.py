@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import logging
 from datetime import datetime, timedelta, timezone
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, Optional
 
 import boto3
 from botocore.client import Config
@@ -37,7 +37,7 @@ def s3_client() -> Any:
 def upload_artifact(
     key: str,
     data: bytes,
-    metadata: dict[str, str] = None,
+    metadata: dict[str, str] | None = None,
     retention_days: int = DEFAULT_RETENTION_DAYS,
 ) -> dict[str, Any]:
     """
@@ -64,8 +64,8 @@ def upload_artifact(
     # Add compliance metadata
     metadata.update(
         {
-            "captured-at": datetime.now(timezone.utc).isoformat(),
-            "retention-until": retention_until.isoformat(),
+            "captured-at": str(datetime.now(timezone.utc).isoformat()),
+            "retention-until": str(retention_until.isoformat()),
         }
     )
 
@@ -143,7 +143,7 @@ def upload_artifact(
         raise
 
 
-def get_artifact(key: str, version_id: str = None) -> bytes:
+def get_artifact(key: str, version_id: Optional[str] = None) -> bytes:
     """
     Retrieve an artifact from S3.
 
@@ -183,7 +183,7 @@ def get_artifact(key: str, version_id: str = None) -> bytes:
 
     try:
         response = client.get_object(**params)
-        data: bytes = response["Body"].read()
+        data = response["Body"].read()
         logger.info(f"Retrieved artifact {key} (latest version)")
         return data
     except ClientError as e:
@@ -191,7 +191,7 @@ def get_artifact(key: str, version_id: str = None) -> bytes:
         raise
 
 
-def get_artifact_metadata(key: str, version_id: str = None) -> dict[str, Any]:
+def get_artifact_metadata(key: str, version_id: Optional[str] = None) -> dict[str, Any]:
     """
     Get metadata for an artifact without downloading it.
 
@@ -248,7 +248,7 @@ def get_artifact_metadata(key: str, version_id: str = None) -> dict[str, Any]:
     }
 
 
-def presign_download(key: str, expires: int = None, version_id: str = None) -> str:
+def presign_download(key: str, expires: Optional[int] = None, version_id: Optional[str] = None) -> str:
     """
     Generate a presigned URL for downloading an artifact.
 
@@ -324,7 +324,7 @@ def verify_object_lock(key: str) -> bool:
         return False
 
 
-def delete_object(key: str, version_id: str = None) -> bool:
+def delete_object(key: str, version_id: Optional[str] = None) -> bool:
     """
     Delete an object from S3.
 

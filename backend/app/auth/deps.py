@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import logging
 import time
-from typing import Any
+from typing import Any, cast
 
 import httpx
 from fastapi import Depends, HTTPException, Request
@@ -112,14 +112,14 @@ def _validate_token_header(token: str) -> str:
 
 def _decode_jwt_claims(token: str, signing_key: dict[str, Any]) -> dict[str, Any]:
     """Decode and validate JWT claims."""
-    return jwt.decode(
+    return cast(dict[str, Any], jwt.decode(
         token,
         signing_key,
         algorithms=["RS256"],
         audience=settings.jwt_audience or settings.cognito_client_id,
         issuer=settings.jwt_issuer
         or f"https://cognito-idp.{settings.cognito_region}.amazonaws.com/{settings.cognito_user_pool_id}",
-    )
+    ))
 
 
 async def verify_jwt_token(token: str) -> dict[str, Any]:

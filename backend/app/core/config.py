@@ -18,16 +18,16 @@ class Settings(BaseModel):
     api_base_path: str = Field(default=os.getenv("API_BASE_PATH", "/api"))
 
     # Cognito Configuration
-    cognito_user_pool_id: str = os.getenv("COGNITO_USER_POOL_ID")
-    cognito_client_id: str = os.getenv("COGNITO_CLIENT_ID")
+    cognito_user_pool_id: str | None = os.getenv("COGNITO_USER_POOL_ID")
+    cognito_client_id: str | None = os.getenv("COGNITO_CLIENT_ID")
     cognito_region: str = Field(default=os.getenv("COGNITO_REGION", "us-east-1"))
-    jwt_audience: str = os.getenv("JWT_AUDIENCE")
-    jwt_issuer: str = os.getenv("JWT_ISSUER")
+    jwt_audience: str | None = os.getenv("JWT_AUDIENCE")
+    jwt_issuer: str | None = os.getenv("JWT_ISSUER")
     jwt_jwks_url: AnyHttpUrl | None = Field(default=None)  # Cognito JWKS
 
     # Data
     s3_bucket_artifacts: str = Field(default=os.getenv("S3_BUCKET_ARTIFACTS", ""))
-    kms_key_arn: str = os.getenv("KMS_KEY_ARN")
+    kms_key_arn: str | None = os.getenv("KMS_KEY_ARN")
     ddb_table_schedules: str = Field(default=os.getenv("DDB_TABLE_SCHEDULES", "schedules"))
     ddb_table_captures: str = Field(default=os.getenv("DDB_TABLE_CAPTURES", "captures"))
 
