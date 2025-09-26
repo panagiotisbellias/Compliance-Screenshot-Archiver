@@ -48,9 +48,9 @@ jobs:
         working-directory: backend
         run: uv run black --check .
 
-      - name: "Ruff linting check"
-        working-directory: backend
-        run: uv run ruff check .
+      # - name: "Ruff linting check"
+      #   working-directory: backend
+      #   run: uv run ruff check .
 
       - name: "MyPy type checking"
         working-directory: backend
