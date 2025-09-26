@@ -32,46 +32,36 @@ jobs:
           sudo apt-get install -y libnss3-dev libatk-bridge2.0-dev libdrm2 libxcomposite1 libxdamage1 libxrandr2 libgbm1 libxss1 libasound2-dev
 
       - name: "Install uv"
-        run: curl -LsSf https://astral.sh/uv/install.sh | sh
+        run: curl -LsSf https://astral.sh/uv/install.sh | bash
+      - name: "Add uv to PATH"
+        run: echo "$HOME/.cargo/bin" >> $GITHUB_PATH
 
       - name: "Install Python dependencies"
         working-directory: backend
-        run: |
-          export PATH="$HOME/.cargo/bin:$PATH"
-          uv sync --dev
+        run: uv sync --dev
 
       - name: "Install Playwright browsers"
         working-directory: backend
-        run: |
-          export PATH="$HOME/.cargo/bin:$PATH"
-          uv run playwright install chromium
+        run: uv run playwright install chromium
 
       - name: "Black code formatting check"
         working-directory: backend
-        run: |
-          export PATH="$HOME/.cargo/bin:$PATH"
-          uv run black --check .
+        run: uv run black --check .
 
       - name: "Ruff linting check"
         working-directory: backend
-        run: |
-          export PATH="$HOME/.cargo/bin:$PATH"
-          uv run ruff check .
+        run: uv run ruff check .
 
       - name: "MyPy type checking"
         working-directory: backend
-        run: |
-          export PATH="$HOME/.cargo/bin:$PATH"
-          uv run mypy app || true
+        run: uv run mypy app || true
 
       - name: "Run tests"
         working-directory: backend
         env:
           APP_ENV: test
           PYTHONPATH: .
-        run: |
-          export PATH="$HOME/.cargo/bin:$PATH"
-          uv run pytest tests/ -v || true
+        run: uv run pytest tests/ -v || true
 
   auto-update-tasks:
     name: "Auto-update TASK.md"
@@ -93,14 +83,14 @@ jobs:
           python-version: "3.12"
           
       - name: "Install uv"
-        run: curl -LsSf https://astral.sh/uv/install.sh | sh
+        run: curl -LsSf https://astral.sh/uv/install.sh | bash
+      - name: "Add uv to PATH"
+        run: echo "$HOME/.cargo/bin" >> $GITHUB_PATH
 
       - name: "Install dependencies"
         working-directory: backend
-        run: |
-          export PATH="$HOME/.cargo/bin:$PATH"
-          uv sync || echo "Failed to install project, continuing..."
-          
+        run: uv sync || echo "Failed to install project, continuing..."
+
       - name: "Auto-update TASK.md"
         run: |
           if [ -f backend/scripts/auto_update_tasks.py ]; then
