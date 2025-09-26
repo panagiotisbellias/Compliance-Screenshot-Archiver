@@ -248,7 +248,9 @@ def get_artifact_metadata(key: str, version_id: Optional[str] = None) -> dict[st
     }
 
 
-def presign_download(key: str, expires: Optional[int] = None, version_id: Optional[str] = None) -> str:
+def presign_download(
+    key: str, expires: Optional[int] = None, version_id: Optional[str] = None
+) -> str:
     """
     Generate a presigned URL for downloading an artifact.
 
