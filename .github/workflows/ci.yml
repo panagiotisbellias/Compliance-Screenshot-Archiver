@@ -36,9 +36,9 @@ jobs:
       - name: "Add uv to PATH"
         run: echo "$HOME/.cargo/bin" >> $GITHUB_PATH
 
-      - name: "Install Python dependencies"
+      - name: "Install Python dependencies (with tools)"
         working-directory: backend
-        run: uv sync --dev
+        run: uv sync --dev --all-extras
 
       - name: "Install Playwright browsers"
         working-directory: backend
