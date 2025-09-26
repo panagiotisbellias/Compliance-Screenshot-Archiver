@@ -2,7 +2,9 @@ name: "CI"
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
+      - 2-fix-code-quality-and-linting-issues
   pull_request:
     branches: [main]
 
