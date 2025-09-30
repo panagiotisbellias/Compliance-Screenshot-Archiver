@@ -1,0 +1,491 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-8.4.1, pluggy-1.6.0 -- /mnt/c/Users/pbell/Projects/Personal/contributions/Compliance-Screenshot-Archiver/backend/.venv/bin/python3
+cachedir: .pytest_cache
+rootdir: /mnt/c/Users/pbell/Projects/Personal/contributions/Compliance-Screenshot-Archiver/backend
+configfile: pyproject.toml
+plugins: anyio-4.10.0, asyncio-1.1.0
+asyncio: mode=Mode.STRICT, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 93 items
+
+tests/test_api_captures.py::TestListCaptures::test_list_captures_success PASSED [  1%]
+tests/test_api_captures.py::TestListCaptures::test_list_captures_with_pagination PASSED [  2%]
+tests/test_api_captures.py::TestListCaptures::test_list_captures_invalid_pagination_token PASSED [  3%]
+tests/test_api_captures.py::TestGetCapture::test_get_capture_success PASSED [  4%]
+tests/test_api_captures.py::TestGetCapture::test_get_capture_not_found PASSED [  5%]
+tests/test_api_captures.py::TestGetCapture::test_get_capture_access_denied PASSED [  6%]
+tests/test_api_captures.py::TestGetCapture::test_get_capture_missing_status PASSED [  7%]
+tests/test_api_captures.py::TestDownloadCapture::test_download_capture_success PASSED [  8%]
+tests/test_api_captures.py::TestDownloadCapture::test_download_capture_not_found PASSED [  9%]
+tests/test_api_captures.py::TestDownloadCapture::test_download_capture_access_denied PASSED [ 10%]
+tests/test_api_captures.py::TestDownloadCapture::test_download_capture_png_content_type PASSED [ 11%]
+tests/test_api_captures.py::TestTriggerCapture::test_trigger_capture_success FAILED [ 12%]
+tests/test_api_captures.py::TestTriggerCapture::test_trigger_capture_png FAILED [ 13%]
+tests/test_api_captures.py::TestTriggerCapture::test_trigger_capture_failure FAILED [ 15%]
+tests/test_api_captures.py::TestTriggerCapture::test_trigger_capture_invalid_type PASSED [ 16%]
+tests/test_api_captures.py::TestVerifyCapture::test_verify_capture_success PASSED [ 17%]
+tests/test_api_captures.py::TestVerifyCapture::test_verify_capture_not_found PASSED [ 18%]
+tests/test_api_captures.py::TestVerifyCapture::test_verify_capture_object_lock_failed PASSED [ 19%]
+tests/test_auth.py::TestJWTAuthentication::test_verify_jwt_token_success PASSED [ 20%]
+tests/test_auth.py::TestJWTAuthentication::test_verify_jwt_token_missing_key_id PASSED [ 21%]
+tests/test_auth.py::TestJWTAuthentication::test_verify_jwt_token_key_not_found PASSED [ 22%]
+tests/test_auth.py::TestJWTAuthentication::test_role_hierarchy PASSED    [ 23%]
+tests/test_auth.py::TestJWTAuthentication::test_cognito_group_mapping PASSED [ 24%]
+tests/test_auth.py::TestJWTAuthentication::test_is_admin PASSED          [ 25%]
+tests/test_auth.py::TestJWTAuthentication::test_can_access_user_resource PASSED [ 26%]
+tests/test_auth.py::TestJWTAuthentication::test_get_current_user_missing_header PASSED [ 27%]
+tests/test_auth.py::TestJWTAuthentication::test_get_current_user_invalid_scheme PASSED [ 29%]
+tests/test_auth.py::TestJWTAuthentication::test_get_current_user_invalid_format PASSED [ 30%]
+tests/test_auth.py::TestJWTAuthentication::test_require_role_sufficient_permissions PASSED [ 31%]
+tests/test_auth.py::TestJWTAuthentication::test_require_role_insufficient_permissions PASSED [ 32%]
+tests/test_auth.py::TestRoleMapping::test_default_role_assignment PASSED [ 33%]
+tests/test_auth.py::TestRoleMapping::test_multiple_groups_highest_role PASSED [ 34%]
+tests/test_auth.py::TestRoleMapping::test_unknown_group_ignored PASSED   [ 35%]
+tests/test_capture_engine.py::TestCaptureWebpage::test_capture_pdf_success PASSED [ 36%]
+tests/test_capture_engine.py::TestCaptureWebpage::test_capture_png_success PASSED [ 37%]
+tests/test_capture_engine.py::TestCaptureWebpage::test_capture_invalid_artifact_type PASSED [ 38%]
+tests/test_capture_engine.py::TestCaptureWebpage::test_capture_with_custom_viewport PASSED [ 39%]
+tests/test_capture_engine.py::TestCaptureWebpage::test_capture_browser_lifecycle PASSED [ 40%]
+tests/test_capture_engine.py::TestCaptureWebpage::test_capture_page_navigation FAILED [ 41%]
+tests/test_capture_engine.py::TestCaptureWebpage::test_capture_pdf_generation FAILED [ 43%]
+tests/test_capture_engine.py::TestCaptureWebpage::test_capture_screenshot_generation FAILED [ 44%]
+tests/test_capture_engine.py::TestCaptureStub::test_capture_stub_pdf PASSED [ 45%]
+tests/test_capture_engine.py::TestCaptureStub::test_capture_stub_png PASSED [ 46%]
+tests/test_capture_engine.py::TestCaptureStub::test_capture_stub_default_type PASSED [ 47%]
+tests/test_integration_auth.py::TestAuthenticationIntegration::test_health_endpoint_no_auth_required PASSED [ 48%]
+tests/test_integration_auth.py::TestAuthenticationIntegration::test_auth_config_no_auth_required PASSED [ 49%]
+tests/test_integration_auth.py::TestAuthenticationIntegration::test_protected_endpoint_no_token PASSED [ 50%]
+tests/test_integration_auth.py::TestAuthenticationIntegration::test_protected_endpoint_invalid_token PASSED [ 51%]
+tests/test_integration_auth.py::TestAuthenticationIntegration::test_protected_endpoint_insufficient_role PASSED [ 52%]
+tests/test_integration_auth.py::TestAuthenticationIntegration::test_successful_authenticated_request PASSED [ 53%]
+tests/test_integration_auth.py::TestAuthenticationIntegration::test_auth_status_endpoint PASSED [ 54%]
+tests/test_integration_auth.py::TestAuthenticationIntegration::test_invalid_authorization_scheme PASSED [ 55%]
+tests/test_integration_auth.py::TestAuthenticationIntegration::test_malformed_authorization_header PASSED [ 56%]
+tests/test_placeholder.py::test_placeholder PASSED                       [ 58%]
+tests/test_storage_dynamo.py::TestCaptureOperations::test_create_capture_success PASSED [ 59%]
+tests/test_storage_dynamo.py::TestCaptureOperations::test_create_capture_minimal_data PASSED [ 60%]
+tests/test_storage_dynamo.py::TestCaptureOperations::test_get_capture_success PASSED [ 61%]
+tests/test_storage_dynamo.py::TestCaptureOperations::test_get_capture_not_found PASSED [ 62%]
+tests/test_storage_dynamo.py::TestCaptureOperations::test_list_captures_by_user PASSED [ 63%]
+tests/test_storage_dynamo.py::TestCaptureOperations::test_list_captures_by_user_with_limit PASSED [ 64%]
+tests/test_storage_dynamo.py::TestCaptureOperations::test_get_capture_by_hash PASSED [ 65%]
+tests/test_storage_dynamo.py::TestCaptureOperations::test_get_capture_by_hash_not_found PASSED [ 66%]
+tests/test_storage_dynamo.py::TestScheduleOperations::test_create_schedule_success PASSED [ 67%]
+tests/test_storage_dynamo.py::TestScheduleOperations::test_create_schedule_with_defaults PASSED [ 68%]
+tests/test_storage_dynamo.py::TestScheduleOperations::test_get_schedule_success PASSED [ 69%]
+tests/test_storage_dynamo.py::TestScheduleOperations::test_get_schedule_not_found PASSED [ 70%]
+tests/test_storage_dynamo.py::TestScheduleOperations::test_list_schedules_by_user PASSED [ 72%]
+tests/test_storage_dynamo.py::TestScheduleOperations::test_update_schedule_success PASSED [ 73%]
+tests/test_storage_dynamo.py::TestScheduleOperations::test_update_schedule_not_found PASSED [ 74%]
+tests/test_storage_dynamo.py::TestScheduleOperations::test_update_schedule_multiple_reserved_keywords PASSED [ 75%]
+tests/test_storage_dynamo.py::TestScheduleOperations::test_update_schedule_no_reserved_keywords PASSED [ 76%]
+tests/test_storage_dynamo.py::TestScheduleOperations::test_delete_schedule_success PASSED [ 77%]
+tests/test_storage_dynamo.py::TestScheduleOperations::test_delete_schedule_not_found PASSED [ 78%]
+tests/test_storage_dynamo.py::TestErrorHandling::test_create_capture_error PASSED [ 79%]
+tests/test_storage_dynamo.py::TestErrorHandling::test_get_capture_error PASSED [ 80%]
+tests/test_storage_s3.py::TestS3Client::test_s3_client_creation PASSED   [ 81%]
+tests/test_storage_s3.py::TestUploadArtifact::test_upload_artifact_success PASSED [ 82%]
+tests/test_storage_s3.py::TestUploadArtifact::test_upload_artifact_with_custom_retention PASSED [ 83%]
+tests/test_storage_s3.py::TestUploadArtifact::test_upload_artifact_failure PASSED [ 84%]
+tests/test_storage_s3.py::TestUploadArtifact::test_upload_artifact_empty_data PASSED [ 86%]
+tests/test_storage_s3.py::TestUploadArtifact::test_upload_artifact_no_metadata PASSED [ 87%]
+tests/test_storage_s3.py::TestGetArtifact::test_get_artifact_success PASSED [ 88%]
+tests/test_storage_s3.py::TestGetArtifact::test_get_artifact_with_version PASSED [ 89%]
+tests/test_storage_s3.py::TestGetArtifact::test_get_artifact_failure PASSED [ 90%]
+tests/test_storage_s3.py::TestGetArtifactMetadata::test_get_artifact_metadata_success PASSED [ 91%]
+tests/test_storage_s3.py::TestGetArtifactMetadata::test_get_artifact_metadata_with_version PASSED [ 92%]
+tests/test_storage_s3.py::TestGetArtifactMetadata::test_get_artifact_metadata_minimal_response PASSED [ 93%]
+tests/test_storage_s3.py::TestPresignDownload::test_presign_download_default_ttl PASSED [ 94%]
+tests/test_storage_s3.py::TestPresignDownload::test_presign_download_custom_ttl PASSED [ 95%]
+tests/test_storage_s3.py::TestPresignDownload::test_presign_download_ttl_cap PASSED [ 96%]
+tests/test_storage_s3.py::TestVerifyObjectLock::test_verify_object_lock_true PASSED [ 97%]
+tests/test_storage_s3.py::TestVerifyObjectLock::test_verify_object_lock_false PASSED [ 98%]
+tests/test_storage_s3.py::TestVerifyObjectLock::test_verify_object_lock_error PASSED [100%]
+
+=================================== FAILURES ===================================
+_______________ TestTriggerCapture.test_trigger_capture_success ________________
+
+args = (<backend.tests.test_api_captures.TestTriggerCapture object at 0x77ca26231730>,)
+keywargs = {'client': <starlette.testclient.TestClient object at 0x77ca2596a5d0>}
+
+    @wraps(func)
+    def patched(*args, **keywargs):
+>       with self.decoration_helper(patched,
+                                    args,
+                                    keywargs) as (newargs, newkeywargs):
+
+/usr/lib/python3.12/unittest/mock.py:1387: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.12/contextlib.py:137: in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+/usr/lib/python3.12/unittest/mock.py:1369: in decoration_helper
+    arg = exit_stack.enter_context(patching)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/contextlib.py:526: in enter_context
+    result = _enter(cm)
+             ^^^^^^^^^^
+/usr/lib/python3.12/unittest/mock.py:1458: in __enter__
+    original, local = self.get_original()
+                      ^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <unittest.mock._patch object at 0x77ca26203e90>
+
+    def get_original(self):
+        target = self.getter()
+        name = self.attribute
+    
+        original = DEFAULT
+        local = False
+    
+        try:
+            original = target.__dict__[name]
+        except (AttributeError, KeyError):
+            original = getattr(target, name, DEFAULT)
+        else:
+            local = True
+    
+        if name in _builtins and isinstance(target, ModuleType):
+            self.create = True
+    
+        if not self.create and original is DEFAULT:
+>           raise AttributeError(
+                "%s does not have the attribute %r" % (target, name)
+            )
+E           AttributeError: <module 'app.api.routes.captures' from '/mnt/c/Users/pbell/Projects/Personal/contributions/Compliance-Screenshot-Archiver/backend/app/api/routes/captures.py'> does not have the attribute 'process_capture_request'
+
+/usr/lib/python3.12/unittest/mock.py:1431: AttributeError
+_________________ TestTriggerCapture.test_trigger_capture_png __________________
+
+args = (<backend.tests.test_api_captures.TestTriggerCapture object at 0x77ca26231910>,)
+keywargs = {'client': <starlette.testclient.TestClient object at 0x77ca259aba10>}
+
+    @wraps(func)
+    def patched(*args, **keywargs):
+>       with self.decoration_helper(patched,
+                                    args,
+                                    keywargs) as (newargs, newkeywargs):
+
+/usr/lib/python3.12/unittest/mock.py:1387: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.12/contextlib.py:137: in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+/usr/lib/python3.12/unittest/mock.py:1369: in decoration_helper
+    arg = exit_stack.enter_context(patching)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/contextlib.py:526: in enter_context
+    result = _enter(cm)
+             ^^^^^^^^^^
+/usr/lib/python3.12/unittest/mock.py:1458: in __enter__
+    original, local = self.get_original()
+                      ^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <unittest.mock._patch object at 0x77ca26203fb0>
+
+    def get_original(self):
+        target = self.getter()
+        name = self.attribute
+    
+        original = DEFAULT
+        local = False
+    
+        try:
+            original = target.__dict__[name]
+        except (AttributeError, KeyError):
+            original = getattr(target, name, DEFAULT)
+        else:
+            local = True
+    
+        if name in _builtins and isinstance(target, ModuleType):
+            self.create = True
+    
+        if not self.create and original is DEFAULT:
+>           raise AttributeError(
+                "%s does not have the attribute %r" % (target, name)
+            )
+E           AttributeError: <module 'app.api.routes.captures' from '/mnt/c/Users/pbell/Projects/Personal/contributions/Compliance-Screenshot-Archiver/backend/app/api/routes/captures.py'> does not have the attribute 'process_capture_request'
+
+/usr/lib/python3.12/unittest/mock.py:1431: AttributeError
+_______________ TestTriggerCapture.test_trigger_capture_failure ________________
+
+args = (<backend.tests.test_api_captures.TestTriggerCapture object at 0x77ca26231b20>,)
+keywargs = {'client': <starlette.testclient.TestClient object at 0x77ca259a2d20>}
+
+    @wraps(func)
+    def patched(*args, **keywargs):
+>       with self.decoration_helper(patched,
+                                    args,
+                                    keywargs) as (newargs, newkeywargs):
+
+/usr/lib/python3.12/unittest/mock.py:1387: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.12/contextlib.py:137: in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+/usr/lib/python3.12/unittest/mock.py:1369: in decoration_helper
+    arg = exit_stack.enter_context(patching)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/contextlib.py:526: in enter_context
+    result = _enter(cm)
+             ^^^^^^^^^^
+/usr/lib/python3.12/unittest/mock.py:1458: in __enter__
+    original, local = self.get_original()
+                      ^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <unittest.mock._patch object at 0x77ca262300e0>
+
+    def get_original(self):
+        target = self.getter()
+        name = self.attribute
+    
+        original = DEFAULT
+        local = False
+    
+        try:
+            original = target.__dict__[name]
+        except (AttributeError, KeyError):
+            original = getattr(target, name, DEFAULT)
+        else:
+            local = True
+    
+        if name in _builtins and isinstance(target, ModuleType):
+            self.create = True
+    
+        if not self.create and original is DEFAULT:
+>           raise AttributeError(
+                "%s does not have the attribute %r" % (target, name)
+            )
+E           AttributeError: <module 'app.api.routes.captures' from '/mnt/c/Users/pbell/Projects/Personal/contributions/Compliance-Screenshot-Archiver/backend/app/api/routes/captures.py'> does not have the attribute 'process_capture_request'
+
+/usr/lib/python3.12/unittest/mock.py:1431: AttributeError
+_______________ TestCaptureWebpage.test_capture_page_navigation ________________
+
+self = <backend.tests.test_capture_engine.TestCaptureWebpage object at 0x77ca25f86090>
+mock_playwright = {'browser': <MagicMock id='131710080379520'>, 'context': <MagicMock id='131710080548112'>, 'mock': <MagicMock name='async_playwright' id='131710080558784'>, 'page': <MagicMock id='131710080643344'>, ...}
+
+    @pytest.mark.asyncio
+    async def test_capture_page_navigation(self, mock_playwright: dict[str, Any]) -> None:
+        """Test that page navigation is called correctly."""
+        url = "https://example.com"
+    
+        await capture_webpage(url)
+    
+        # Verify page navigation
+        mock_page = mock_playwright["page"]
+    
+>       mock_page.goto.assert_called_once_with(url, wait_until="networkidle", timeout=30000)
+
+tests/test_capture_engine.py:103: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.12/unittest/mock.py:956: in assert_called_once_with
+    return self.assert_called_with(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <AsyncMock name='mock.goto' id='131710080540240'>
+args = ('https://example.com',)
+kwargs = {'timeout': 30000, 'wait_until': 'networkidle'}
+expected = call('https://example.com', wait_until='networkidle', timeout=30000)
+actual = call('https://example.com', wait_until='networkidle', timeout=15000)
+_error_message = <function NonCallableMock.assert_called_with.<locals>._error_message at 0x77ca259e20c0>
+cause = None
+
+    def assert_called_with(self, /, *args, **kwargs):
+        """assert that the last call was made with the specified arguments.
+    
+        Raises an AssertionError if the args and keyword args passed in are
+        different to the last call to the mock."""
+        if self.call_args is None:
+            expected = self._format_mock_call_signature(args, kwargs)
+            actual = 'not called.'
+            error_message = ('expected call not found.\nExpected: %s\n  Actual: %s'
+                    % (expected, actual))
+            raise AssertionError(error_message)
+    
+        def _error_message():
+            msg = self._format_mock_failure_message(args, kwargs)
+            return msg
+        expected = self._call_matcher(_Call((args, kwargs), two=True))
+        actual = self._call_matcher(self.call_args)
+        if actual != expected:
+            cause = expected if isinstance(expected, Exception) else None
+>           raise AssertionError(_error_message()) from cause
+E           AssertionError: expected call not found.
+E           Expected: goto('https://example.com', wait_until='networkidle', timeout=30000)
+E             Actual: goto('https://example.com', wait_until='networkidle', timeout=15000)
+
+/usr/lib/python3.12/unittest/mock.py:944: AssertionError
+----------------------------- Captured stderr call -----------------------------
+Starting Playwright capture for https://example.com as pdf
+Playwright context created, launching Chromium browser
+Navigating to https://example.com
+Page loaded successfully with networkidle for https://example.com
+Generated PDF for https://example.com, size: 16 bytes
+Captured https://example.com as pdf, SHA-256: 38e0d178ad5a2608935ce2dc05481ef884c2f32eff3401a6e1b2d44a6ff07141
+------------------------------ Captured log call -------------------------------
+INFO     app.capture_engine.engine:engine.py:40 Starting Playwright capture for https://example.com as pdf
+INFO     app.capture_engine.engine:engine.py:44 Playwright context created, launching Chromium browser
+INFO     app.capture_engine.engine:engine.py:86 Navigating to https://example.com
+INFO     app.capture_engine.engine:engine.py:91 Page loaded successfully with networkidle for https://example.com
+INFO     app.capture_engine.engine:engine.py:110 Generated PDF for https://example.com, size: 16 bytes
+INFO     app.capture_engine.engine:engine.py:122 Captured https://example.com as pdf, SHA-256: 38e0d178ad5a2608935ce2dc05481ef884c2f32eff3401a6e1b2d44a6ff07141
+________________ TestCaptureWebpage.test_capture_pdf_generation ________________
+
+self = <backend.tests.test_capture_engine.TestCaptureWebpage object at 0x77ca25f862d0>
+mock_playwright = {'browser': <MagicMock id='131710080160672'>, 'context': <MagicMock id='131710080563104'>, 'mock': <MagicMock name='async_playwright' id='131710080639696'>, 'page': <MagicMock id='131710080635856'>, ...}
+
+    @pytest.mark.asyncio
+    async def test_capture_pdf_generation(self, mock_playwright: dict[str, Any]) -> None:
+        """Test PDF generation with correct parameters."""
+        url = "https://example.com"
+        artifact_type = "pdf"
+    
+        await capture_webpage(url, artifact_type)
+    
+        # Verify PDF generation
+        mock_page = mock_playwright["page"]
+    
+>       mock_page.pdf.assert_called_once_with(
+            format="A4",
+            print_background=True,
+            margin={"top": "1cm", "bottom": "1cm", "left": "1cm", "right": "1cm"},
+        )
+
+tests/test_capture_engine.py:116: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.12/unittest/mock.py:956: in assert_called_once_with
+    return self.assert_called_with(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <AsyncMock name='mock.pdf' id='131710080631824'>, args = ()
+kwargs = {'format': 'A4', 'margin': {'bottom': '1cm', 'left': '1cm', 'right': '1cm', 'top': '1cm'}, 'print_background': True}
+expected = call(format='A4', print_background=True, margin={'top': '1cm', 'bottom': '1cm', 'left': '1cm', 'right': '1cm'})
+actual = call(format='A4', print_background=True, margin={'top': '1cm', 'right': '1cm', 'bottom': '1cm', 'left': '1cm'}, prefer_css_page_size=False)
+_error_message = <function NonCallableMock.assert_called_with.<locals>._error_message at 0x77ca259e1580>
+cause = None
+
+    def assert_called_with(self, /, *args, **kwargs):
+        """assert that the last call was made with the specified arguments.
+    
+        Raises an AssertionError if the args and keyword args passed in are
+        different to the last call to the mock."""
+        if self.call_args is None:
+            expected = self._format_mock_call_signature(args, kwargs)
+            actual = 'not called.'
+            error_message = ('expected call not found.\nExpected: %s\n  Actual: %s'
+                    % (expected, actual))
+            raise AssertionError(error_message)
+    
+        def _error_message():
+            msg = self._format_mock_failure_message(args, kwargs)
+            return msg
+        expected = self._call_matcher(_Call((args, kwargs), two=True))
+        actual = self._call_matcher(self.call_args)
+        if actual != expected:
+            cause = expected if isinstance(expected, Exception) else None
+>           raise AssertionError(_error_message()) from cause
+E           AssertionError: expected call not found.
+E           Expected: pdf(format='A4', print_background=True, margin={'top': '1cm', 'bottom': '1cm', 'left': '1cm', 'right': '1cm'})
+E             Actual: pdf(format='A4', print_background=True, margin={'top': '1cm', 'right': '1cm', 'bottom': '1cm', 'left': '1cm'}, prefer_css_page_size=False)
+
+/usr/lib/python3.12/unittest/mock.py:944: AssertionError
+----------------------------- Captured stderr call -----------------------------
+Starting Playwright capture for https://example.com as pdf
+Playwright context created, launching Chromium browser
+Navigating to https://example.com
+Page loaded successfully with networkidle for https://example.com
+Generated PDF for https://example.com, size: 16 bytes
+Captured https://example.com as pdf, SHA-256: 38e0d178ad5a2608935ce2dc05481ef884c2f32eff3401a6e1b2d44a6ff07141
+------------------------------ Captured log call -------------------------------
+INFO     app.capture_engine.engine:engine.py:40 Starting Playwright capture for https://example.com as pdf
+INFO     app.capture_engine.engine:engine.py:44 Playwright context created, launching Chromium browser
+INFO     app.capture_engine.engine:engine.py:86 Navigating to https://example.com
+INFO     app.capture_engine.engine:engine.py:91 Page loaded successfully with networkidle for https://example.com
+INFO     app.capture_engine.engine:engine.py:110 Generated PDF for https://example.com, size: 16 bytes
+INFO     app.capture_engine.engine:engine.py:122 Captured https://example.com as pdf, SHA-256: 38e0d178ad5a2608935ce2dc05481ef884c2f32eff3401a6e1b2d44a6ff07141
+____________ TestCaptureWebpage.test_capture_screenshot_generation _____________
+
+self = <backend.tests.test_capture_engine.TestCaptureWebpage object at 0x77ca25f86510>
+mock_playwright = {'browser': <MagicMock id='131710097981904'>, 'context': <MagicMock id='131710080042480'>, 'mock': <MagicMock name='async_playwright' id='131710080280832'>, 'page': <MagicMock id='131710098471008'>, ...}
+
+    @pytest.mark.asyncio
+    async def test_capture_screenshot_generation(self, mock_playwright: dict[str, Any]) -> None:
+        """Test screenshot generation with correct parameters."""
+        url = "https://example.com"
+        artifact_type = "png"
+    
+        await capture_webpage(url, artifact_type)
+    
+        # Verify screenshot generation
+        mock_page = mock_playwright["page"]
+    
+>       mock_page.screenshot.assert_called_once_with(
+            full_page=True,
+            type="png",
+        )
+
+tests/test_capture_engine.py:133: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.12/unittest/mock.py:956: in assert_called_once_with
+    return self.assert_called_with(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <AsyncMock name='mock.screenshot' id='131710080051744'>, args = ()
+kwargs = {'full_page': True, 'type': 'png'}
+expected = call(full_page=True, type='png')
+actual = call(full_page=False, type='png')
+_error_message = <function NonCallableMock.assert_called_with.<locals>._error_message at 0x77ca259e3ce0>
+cause = None
+
+    def assert_called_with(self, /, *args, **kwargs):
+        """assert that the last call was made with the specified arguments.
+    
+        Raises an AssertionError if the args and keyword args passed in are
+        different to the last call to the mock."""
+        if self.call_args is None:
+            expected = self._format_mock_call_signature(args, kwargs)
+            actual = 'not called.'
+            error_message = ('expected call not found.\nExpected: %s\n  Actual: %s'
+                    % (expected, actual))
+            raise AssertionError(error_message)
+    
+        def _error_message():
+            msg = self._format_mock_failure_message(args, kwargs)
+            return msg
+        expected = self._call_matcher(_Call((args, kwargs), two=True))
+        actual = self._call_matcher(self.call_args)
+        if actual != expected:
+            cause = expected if isinstance(expected, Exception) else None
+>           raise AssertionError(_error_message()) from cause
+E           AssertionError: expected call not found.
+E           Expected: screenshot(full_page=True, type='png')
+E             Actual: screenshot(full_page=False, type='png')
+
+/usr/lib/python3.12/unittest/mock.py:944: AssertionError
+----------------------------- Captured stderr call -----------------------------
+Starting Playwright capture for https://example.com as png
+Playwright context created, launching Chromium browser
+Navigating to https://example.com
+Page loaded successfully with networkidle for https://example.com
+Generated PNG screenshot for https://example.com, size: 16 bytes
+Captured https://example.com as png, SHA-256: d0aa9ef949e23c47eb11cd97ffac3063424ff77f52902c5e92fd399b300ef6af
+------------------------------ Captured log call -------------------------------
+INFO     app.capture_engine.engine:engine.py:40 Starting Playwright capture for https://example.com as png
+INFO     app.capture_engine.engine:engine.py:44 Playwright context created, launching Chromium browser
+INFO     app.capture_engine.engine:engine.py:86 Navigating to https://example.com
+INFO     app.capture_engine.engine:engine.py:91 Page loaded successfully with networkidle for https://example.com
+INFO     app.capture_engine.engine:engine.py:117 Generated PNG screenshot for https://example.com, size: 16 bytes
+INFO     app.capture_engine.engine:engine.py:122 Captured https://example.com as png, SHA-256: d0aa9ef949e23c47eb11cd97ffac3063424ff77f52902c5e92fd399b300ef6af
+=========================== short test summary info ============================
+FAILED tests/test_api_captures.py::TestTriggerCapture::test_trigger_capture_success
+FAILED tests/test_api_captures.py::TestTriggerCapture::test_trigger_capture_png
+FAILED tests/test_api_captures.py::TestTriggerCapture::test_trigger_capture_failure
+FAILED tests/test_capture_engine.py::TestCaptureWebpage::test_capture_page_navigation
+FAILED tests/test_capture_engine.py::TestCaptureWebpage::test_capture_pdf_generation
+FAILED tests/test_capture_engine.py::TestCaptureWebpage::test_capture_screenshot_generation
+=================== 6 failed, 87 passed in 967.58s (0:16:07) ===================
