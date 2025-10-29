@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import uuid
-from typing import Any, Dict
+from typing import Any
 
 from fastapi import APIRouter, Depends, HTTPException
 
@@ -69,7 +69,7 @@ def get_schedule(schedule_id: str, _: dict[str, str] = _viewer_dep) -> ScheduleO
 
 @router.put("/{schedule_id}", response_model=ScheduleOut)
 def update_schedule(
-    schedule_id: str, payload: Dict[str, Any], _: dict[str, str] = _operator_dep
+    schedule_id: str, payload: dict[str, Any], _: dict[str, str] = _operator_dep
 ) -> ScheduleOut:
     """
     Update a schedule.
@@ -101,7 +101,7 @@ def update_schedule(
 
 
 @router.delete("/{schedule_id}")
-def delete_schedule(schedule_id: str, _: dict[str, str] = _operator_dep) -> Dict[str, str]:
+def delete_schedule(schedule_id: str, _: dict[str, str] = _operator_dep) -> dict[str, str]:
     """
     Delete a schedule.
 

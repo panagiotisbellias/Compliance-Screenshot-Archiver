@@ -9,8 +9,8 @@ from ...auth.deps import can_access_user_resource, require_operator, require_vie
 
 # Removed direct import of processor to avoid Playwright dependency in API Lambda
 from ...domain.models import CaptureOut
-from ...storage.dynamo import get_capture, list_captures_by_user, delete_capture
-from ...storage.s3 import presign_download, delete_object
+from ...storage.dynamo import delete_capture, get_capture, list_captures_by_user
+from ...storage.s3 import delete_object, presign_download
 
 router: APIRouter = APIRouter()
 logger = logging.getLogger(__name__)

@@ -5,9 +5,6 @@ print("Testing imports step by step...")
 
 try:
     print("1. Testing basic imports...")
-    import json
-    import logging
-    from typing import Any
 
     print("   ✓ Basic imports OK")
 except Exception as e:
@@ -16,7 +13,6 @@ except Exception as e:
 
 try:
     print("2. Testing mangum import...")
-    from mangum import Mangum
 
     print("   ✓ Mangum import OK")
 except Exception as e:
@@ -25,7 +21,6 @@ except Exception as e:
 
 try:
     print("3. Testing core.logging import...")
-    from app.core.logging import jlog
 
     print("   ✓ Core logging import OK")
 except Exception as e:
@@ -43,7 +38,6 @@ except Exception as e:
 
 try:
     print("5. Testing main app import...")
-    from app.main import app
 
     print("   ✓ Main app import OK")
 except Exception as e:

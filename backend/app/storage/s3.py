@@ -1,8 +1,8 @@
 from __future__ import annotations
 
 import logging
-from datetime import datetime, timedelta, timezone
-from typing import TYPE_CHECKING, Any, Optional
+from datetime import UTC, datetime, timedelta
+from typing import TYPE_CHECKING, Any
 
 import boto3
 from botocore.client import Config
@@ -55,7 +55,7 @@ def upload_artifact(
     client = s3_client()
 
     # Calculate retention date
-    retention_until = datetime.now(timezone.utc) + timedelta(days=retention_days)
+    retention_until = datetime.now(UTC) + timedelta(days=retention_days)
 
     # Prepare metadata
     if metadata is None:
@@ -64,7 +64,7 @@ def upload_artifact(
     # Add compliance metadata
     metadata.update(
         {
-            "captured-at": str(datetime.now(timezone.utc).isoformat()),
+            "captured-at": str(datetime.now(UTC).isoformat()),
             "retention-until": str(retention_until.isoformat()),
         }
     )
@@ -143,7 +143,7 @@ def upload_artifact(
         raise
 
 
-def get_artifact(key: str, version_id: Optional[str] = None) -> bytes:
+def get_artifact(key: str, version_id: str | None = None) -> bytes:
     """
     Retrieve an artifact from S3.
 
@@ -191,7 +191,7 @@ def get_artifact(key: str, version_id: Optional[str] = None) -> bytes:
         raise
 
 
-def get_artifact_metadata(key: str, version_id: Optional[str] = None) -> dict[str, Any]:
+def get_artifact_metadata(key: str, version_id: str | None = None) -> dict[str, Any]:
     """
     Get metadata for an artifact without downloading it.
 
@@ -249,7 +249,7 @@ def get_artifact_metadata(key: str, version_id: Optional[str] = None) -> dict[st
 
 
 def presign_download(
-    key: str, expires: Optional[int] = None, version_id: Optional[str] = None
+    key: str, expires: int | None = None, version_id: str | None = None
 ) -> str:
     """
     Generate a presigned URL for downloading an artifact.
@@ -326,7 +326,7 @@ def verify_object_lock(key: str) -> bool:
         return False
 
 
-def delete_object(key: str, version_id: Optional[str] = None) -> bool:
+def delete_object(key: str, version_id: str | None = None) -> bool:
     """
     Delete an object from S3.
 

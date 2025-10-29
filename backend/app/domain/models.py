@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Literal, Optional
+from typing import Literal
 
 from pydantic import BaseModel, Field, HttpUrl
 
@@ -35,7 +35,7 @@ class CaptureOut(BaseModel):
     """
 
     id: str
-    schedule_id: Optional[str] = None
+    schedule_id: str | None = None
     sha256: str
     s3_key: str
     artifact_type: Literal["png", "pdf"] = "pdf"
