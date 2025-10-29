@@ -3,12 +3,20 @@
 from __future__ import annotations
 
 import logging
+import os
+import sys
+import traceback
 import uuid
 from typing import Any
+
+import playwright
 
 from ..core.logging import jlog
 from ..storage.dynamo import CaptureData, create_capture
 from ..storage.s3 import upload_artifact
+
+# Import our capture engine
+from .engine import capture_webpage
 
 # Import moved inside function to avoid Playwright dependency at module level
 
@@ -37,18 +45,12 @@ async def process_capture_request(
     """
     # ONLY use Playwright - no fallbacks
     try:
-        # First test basic playwright import
-        import playwright
-
         # Get version safely (may not be available in all installations)
         try:
             version = getattr(playwright, "__version__", "unknown")
-        except:
+        except Exception:
             version = "unknown"
         jlog(logger, "playwright_version", version=version, level="INFO")
-
-        # Test async_playwright import
-        from playwright.async_api import async_playwright
 
         jlog(
             logger,
@@ -57,9 +59,6 @@ async def process_capture_request(
             level="INFO",
         )
 
-        # Import our capture engine
-        from .engine import capture_webpage
-
         jlog(
             logger,
             "capture_engine",
@@ -67,9 +66,6 @@ async def process_capture_request(
             level="INFO",
         )
     except ImportError as e:
-        import os
-        import sys
-
         error_msg = f"CRITICAL: Playwright import failed: {str(e)}"
         jlog(
             logger,
@@ -80,7 +76,7 @@ async def process_capture_request(
             working_dir=os.getcwd(),
             level="ERROR",
         )
-        raise RuntimeError(f"Playwright is required but not available: {str(e)}")
+        raise RuntimeError(f"Playwright is required but not available: {str(e)}") from e
 
     # Use provided capture_id or generate new one
     if capture_id is None:
@@ -89,9 +85,6 @@ async def process_capture_request(
     try:
         # Step 1: Capture the webpage
         jlog(logger, "capture_start", capture_id=capture_id, url=url, artifact_type=artifact_type)
-
-        # Test Playwright browser availability before capture
-        import os
 
         playwright_browsers_path = os.environ.get("PLAYWRIGHT_BROWSERS_PATH", "/ms-playwright")
         jlog(
@@ -172,7 +165,6 @@ async def process_capture_request(
 
     except Exception as e:
         error_msg = str(e)
-        import traceback
 
         stack_trace = traceback.format_exc()
 

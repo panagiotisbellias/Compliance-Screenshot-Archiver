@@ -7,6 +7,7 @@ import logging
 from mangum import Mangum  # type: ignore
 
 from .core.logging import configure_logging
+from .main import app
 
 # Configure logging
 configure_logging(logging.INFO)
@@ -15,8 +16,6 @@ logger = logging.getLogger(__name__)
 
 def create_api_handler():
     """Create the Lambda handler with lazy import to avoid circular imports."""
-    from .main import app
-
     return Mangum(app)
 
 

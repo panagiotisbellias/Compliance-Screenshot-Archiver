@@ -7,6 +7,8 @@ from typing import Any
 from fastapi import APIRouter, Depends, HTTPException, Query
 
 from ...auth.deps import require_operator
+from ...capture_engine.processor import process_capture_request
+from ...storage.s3 import presign_download
 
 router: APIRouter = APIRouter()
 logger = logging.getLogger(__name__)
@@ -36,8 +38,6 @@ async def trigger_capture_sync(
     capture_id = str(uuid.uuid4())
 
     try:
-        from ...capture_engine.processor import process_capture_request
-
         logger.info(f"Starting synchronous capture {capture_id} for {url}")
 
         result = await process_capture_request(
@@ -50,8 +50,6 @@ async def trigger_capture_sync(
 
         if result.get("status") == "completed":
             # Generate download URL immediately
-            from ...storage.s3 import presign_download
-
             s3_version_id = result.get("s3_details", {}).get("version_id")
             download_url = presign_download(result["s3_key"], version_id=s3_version_id)
 

@@ -1,13 +1,17 @@
 from __future__ import annotations
 
+import asyncio
 import json
 import logging
 from typing import Any
 
 from mangum import Mangum  # type: ignore
 
+from .capture_engine.processor import process_capture_request
+
 # Import moved to inside eventbridge_handler to avoid importing capture dependencies in API Lambda
 from .core.logging import jlog
+from .main import app
 
 logger = logging.getLogger(__name__)
 
@@ -15,8 +19,6 @@ logger = logging.getLogger(__name__)
 # Initialize Mangum handler for AWS Lambda
 def create_handler():
     """Create the Lambda handler with lazy import to avoid circular imports."""
-    from .main import app
-
     return Mangum(app)
 
 
@@ -67,9 +69,6 @@ def eventbridge_handler(event: dict[str, Any], _context: Any) -> dict[str, Any]:
 
 def handle_scheduled_capture(event: dict[str, Any]) -> dict[str, Any]:
     """Handle EventBridge Scheduler triggered captures."""
-    import asyncio
-
-    from .capture_engine.processor import process_capture_request
 
     detail = event.get("detail", {})
     url = detail.get("url")
@@ -95,9 +94,6 @@ def handle_scheduled_capture(event: dict[str, Any]) -> dict[str, Any]:
 
 def handle_sqs_batch(event: dict[str, Any]) -> dict[str, Any]:
     """Handle SQS batch of capture requests."""
-    import asyncio
-
-    from .capture_engine.processor import process_capture_request
 
     records = event.get("Records", [])
     results = []
@@ -135,9 +131,6 @@ def handle_sqs_batch(event: dict[str, Any]) -> dict[str, Any]:
 
 def handle_direct_capture(event: dict[str, Any]) -> dict[str, Any]:
     """Handle direct Lambda invocation with capture details."""
-    import asyncio
-
-    from .capture_engine.processor import process_capture_request
 
     url = event.get("url")
     artifact_type = event.get("artifact_type", "pdf")

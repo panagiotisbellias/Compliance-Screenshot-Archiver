@@ -17,6 +17,8 @@ from reportlab.pdfgen import canvas
 
 logger = logging.getLogger(__name__)
 
+MIN_BLOCK_LENGTH = 10
+
 
 async def capture_webpage_simple(
     url: str,
@@ -43,126 +45,17 @@ async def capture_webpage_simple(
         raise NotImplementedError("PNG capture not implemented in simple engine")
 
     # Fetch webpage content
-    async with httpx.AsyncClient(timeout=30.0) as client:
-        try:
-            response = await client.get(
-                url,
-                headers={
-                    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
-                },
-                follow_redirects=True,
-            )
-            response.raise_for_status()
-            content = response.text
-            title = "Webpage Capture"
+    content, title = await fetch_webpage_content(url)
 
-            # Extract title from HTML if possible
-            if "<title>" in content and "</title>" in content:
-                start = content.find("<title>") + 7
-                end = content.find("</title>", start)
-                if end > start:
-                    title = content[start:end].strip()
-
-        except Exception as e:
-            logger.warning(f"Failed to fetch {url}: {e}")
-            content = f"Failed to fetch webpage: {e}"
-            title = "Capture Failed"
+    # Extract and display key content from HTML
+    blocks = extract_text_blocks(content)
 
     # Create a visual representation of the webpage
     # Generate a screenshot-like image that represents the webpage
-    img_width, img_height = 1200, 1600
-    img = Image.new("RGB", (img_width, img_height), color="white")
-    draw = ImageDraw.Draw(img)
-
-    try:
-        # Try to use a default font, fallback to basic if not available
-        font_title = ImageFont.load_default()
-        font_text = ImageFont.load_default()
-    except:
-        font_title = None
-        font_text = None
-
-    # Draw header with URL and title
-    y_pos = 20
-    draw.rectangle([0, 0, img_width, 80], fill="#f8f9fa", outline="#dee2e6")
-    draw.text((20, 20), f"Captured: {url}", fill="#495057", font=font_title)
-    draw.text((20, 45), title[:80], fill="#212529", font=font_title)
-
-    y_pos = 100
-
-    # Extract and display key content from HTML
-    # Remove script and style tags
-    clean_html = re.sub(r"<script[^>]*>.*?</script>", "", content, flags=re.DOTALL | re.IGNORECASE)
-    clean_html = re.sub(r"<style[^>]*>.*?</style>", "", clean_html, flags=re.DOTALL | re.IGNORECASE)
-
-    # Extract text content
-    text_content = re.sub(r"<[^>]+>", " ", clean_html)
-    text_content = re.sub(r"\s+", " ", text_content).strip()
-
-    # Draw content blocks to simulate webpage layout
-    content_blocks = text_content[:1500].split(".")  # First 1500 chars, split by sentences
-
-    for block in content_blocks[:20]:  # Limit to 20 blocks
-        if not block.strip():
-            continue
-
-        block = block.strip()[:120]  # Limit block length
-        if len(block) < 10:  # Skip very short blocks
-            continue
-
-        # Draw a content block
-        block_height = 40
-        if y_pos + block_height > img_height - 50:
-            break
-
-        # Draw block background
-        draw.rectangle(
-            [20, y_pos, img_width - 20, y_pos + block_height], fill="#ffffff", outline="#e9ecef"
-        )
-
-        # Draw text content
-        draw.text((30, y_pos + 10), block, fill="#212529", font=font_text)
-
-        y_pos += block_height + 10
+    img = render_webpage_image(url, title, blocks)
 
     # Convert PIL image to PDF
-    buffer = BytesIO()
-    p = canvas.Canvas(buffer, pagesize=A4)
-    width, height = A4
-
-    # Convert PIL image to format that ReportLab can use
-    img_buffer = BytesIO()
-    img.save(img_buffer, format="PNG")
-    img_buffer.seek(0)
-
-    # Scale image to fit PDF page
-    img_reader = ImageReader(img_buffer)
-
-    # Calculate scaling to fit page width while maintaining aspect ratio
-    pdf_width = width - 40  # Leave margins
-    scale = pdf_width / img_width
-    scaled_height = img_height * scale
-
-    # If image is too tall, scale to fit height instead
-    if scaled_height > height - 40:
-        scale = (height - 40) / img_height
-        scaled_height = height - 40
-        pdf_width = img_width * scale
-
-    # Center the image on the page
-    x_offset = (width - pdf_width) / 2
-    y_offset = height - 20 - scaled_height
-
-    # Draw the image
-    p.drawImage(img_reader, x_offset, y_offset, pdf_width, scaled_height)
-
-    # Add footer with capture info
-    p.setFont("Helvetica", 8)
-    p.setFillColor("#666666")
-    p.drawString(20, 20, "Captured via Simple HTTP Engine | SHA-256 will be calculated")
-
-    p.save()
-    artifact_data = buffer.getvalue()
+    artifact_data = image_to_pdf(img)
 
     # Calculate SHA-256 hash
     sha256_hash = hashlib.sha256(artifact_data).hexdigest()
@@ -177,6 +70,119 @@ async def capture_webpage_simple(
         "content_length": len(artifact_data),
         "capture_method": "simple_http",
     }
+
+
+async def fetch_webpage_content(url: str) -> tuple[str, str]:
+    """Fetch HTML content and title from a webpage."""
+    async with httpx.AsyncClient(timeout=30.0) as client:
+        try:
+            response = await client.get(
+                url,
+                headers={
+                    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+                },
+                follow_redirects=True,
+            )
+            response.raise_for_status()
+            content = response.text
+            title = extract_title(content)
+        except Exception as e:
+            logger.warning(f"Failed to fetch {url}: {e}")
+            content = f"Failed to fetch webpage: {e}"
+            title = "Capture Failed"
+    return content, title
+
+
+def extract_title(html: str) -> str:
+    """Extract the title tag from HTML content."""
+    if "<title>" in html and "</title>" in html:
+        start = html.find("<title>") + 7
+        end = html.find("</title>", start)
+        if end > start:
+            return html[start:end].strip()
+    return "Webpage Capture"
+
+
+def extract_text_blocks(
+    html: str, max_chars: int = 1500, max_blocks: int = 20, min_block_length: int = 10
+) -> list[str]:
+    """Clean HTML and split into text blocks for drawing."""
+    clean_html = re.sub(r"<script[^>]*>.*?</script>", "", html, flags=re.DOTALL | re.IGNORECASE)
+    clean_html = re.sub(r"<style[^>]*>.*?</style>", "", clean_html, flags=re.DOTALL | re.IGNORECASE)
+    text_content = re.sub(r"<[^>]+>", " ", clean_html)
+    text_content = re.sub(r"\s+", " ", text_content).strip()
+    blocks = []
+    for raw_block in text_content[:max_chars].split(".")[:max_blocks]:
+        block = raw_block.strip()[:120]
+        if len(block) >= min_block_length:
+            blocks.append(block)
+    return blocks
+
+
+def render_webpage_image(
+    url: str, title: str, content_blocks: list[str], img_width: int = 1200, img_height: int = 1600
+) -> Image.Image:
+    """Draw the webpage representation as an image."""
+    img = Image.new("RGB", (img_width, img_height), color="white")
+    draw = ImageDraw.Draw(img)
+
+    try:
+        font_title = ImageFont.load_default()
+        font_text = ImageFont.load_default()
+    except Exception:
+        font_title = None
+        font_text = None
+
+    # Header
+    y_pos = 20
+    draw.rectangle([0, 0, img_width, 80], fill="#f8f9fa", outline="#dee2e6")
+    draw.text((20, 20), f"Captured: {url}", fill="#495057", font=font_title)
+    draw.text((20, 45), title[:80], fill="#212529", font=font_title)
+    y_pos = 100
+
+    # Draw content blocks
+    for block in content_blocks:
+        block_height = 40
+        if y_pos + block_height > img_height - 50:
+            break
+        draw.rectangle(
+            [20, y_pos, img_width - 20, y_pos + block_height], fill="#ffffff", outline="#e9ecef"
+        )
+        draw.text((30, y_pos + 10), block, fill="#212529", font=font_text)
+        y_pos += block_height + 10
+
+    return img
+
+
+def image_to_pdf(img: Image.Image) -> bytes:
+    """Convert a PIL image to a PDF byte array."""
+    buffer = BytesIO()
+    p = canvas.Canvas(buffer, pagesize=A4)
+    width, height = A4
+
+    img_buffer = BytesIO()
+    img.save(img_buffer, format="PNG")
+    img_buffer.seek(0)
+    img_reader = ImageReader(img_buffer)
+
+    pdf_width = width - 40
+    scale = pdf_width / img.width
+    scaled_height = img.height * scale
+
+    if scaled_height > height - 40:
+        scale = (height - 40) / img.height
+        scaled_height = height - 40
+        pdf_width = img.width * scale
+
+    x_offset = (width - pdf_width) / 2
+    y_offset = height - 20 - scaled_height
+
+    p.drawImage(img_reader, x_offset, y_offset, pdf_width, scaled_height)
+    p.setFont("Helvetica", 8)
+    p.setFillColor("#666666")
+    p.drawString(20, 20, "Captured via Simple HTTP Engine | SHA-256 will be calculated")
+    p.save()
+    return buffer.getvalue()
 
 
 def capture_simple_stub(url: str, artifact_type: str = "pdf") -> dict[str, Any]:

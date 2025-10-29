@@ -192,8 +192,6 @@ async def get_current_user(request: Request) -> dict[str, Any]:
     Raises:
         AuthenticationError: If authentication fails.
     """
-    from ..core.config import settings
-
     authorization = request.headers.get("Authorization")
 
     if not authorization:

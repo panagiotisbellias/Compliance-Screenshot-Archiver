@@ -7,6 +7,7 @@ from collections.abc import Generator
 from typing import Any
 from unittest.mock import AsyncMock, MagicMock, patch
 
+import boto3
 import pytest
 from moto import mock_aws
 
@@ -32,8 +33,6 @@ def mock_aws_credentials() -> None:
 def mock_s3_bucket(mock_aws_credentials: None) -> Generator[str, None, None]:
     """Create a mock S3 bucket for testing."""
     with mock_aws():
-        import boto3
-
         s3_client = boto3.client("s3", region_name="us-east-1")
         bucket_name = "test-artifacts-bucket"
 
@@ -50,8 +49,6 @@ def mock_s3_bucket(mock_aws_credentials: None) -> Generator[str, None, None]:
 def mock_dynamodb_tables(mock_aws_credentials: None) -> Generator[dict[str, Any], None, None]:
     """Create mock DynamoDB tables for testing."""
     with mock_aws():
-        import boto3
-
         dynamodb = boto3.resource("dynamodb", region_name="us-east-1")
 
         # Create schedules table

@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+import sys
+
 """Test script to simulate exact Lambda import."""
 
 print("Testing exact Lambda import path...")
@@ -14,6 +16,6 @@ except Exception as e:
     import traceback
 
     traceback.print_exc()
-    exit(1)
+    sys.exit(1)
 
 print("Lambda import test successful!")

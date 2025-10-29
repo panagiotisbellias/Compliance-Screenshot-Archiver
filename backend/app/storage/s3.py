@@ -293,7 +293,8 @@ def presign_download(key: str, expires: int | None = None, version_id: str | Non
                 # Don't add VersionId to params, will use latest
             else:
                 logger.warning(
-                    f"Failed to verify version {version_id} for {key}: {e} - falling back to latest version"
+                    f"Failed to verify version {version_id} for {key}: {e} - "
+                    "falling back to latest version"
                 )
                 # Still try to generate URL without version ID
     else:

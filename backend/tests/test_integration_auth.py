@@ -4,6 +4,7 @@ from unittest.mock import patch
 
 from fastapi.testclient import TestClient
 
+from app.auth.deps import AuthenticationError
 from app.main import app
 
 
@@ -42,8 +43,6 @@ class TestAuthenticationIntegration:
         headers = {"Authorization": "Bearer invalid-token"}
 
         with patch("app.auth.deps.verify_jwt_token") as mock_verify:
-            from app.auth.deps import AuthenticationError
-
             mock_verify.side_effect = AuthenticationError("Invalid token")
 
             response = self.client.get("/api/captures", headers=headers)

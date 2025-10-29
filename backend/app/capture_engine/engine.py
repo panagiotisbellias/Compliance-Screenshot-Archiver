@@ -11,9 +11,8 @@ from playwright.async_api import async_playwright
 logger = logging.getLogger(__name__)
 
 # Log Playwright environment on module import
-logger.info(
-    f"Playwright module loaded - browsers path: {os.environ.get('PLAYWRIGHT_BROWSERS_PATH', 'not set')}"
-)
+browsers_path = os.environ.get("PLAYWRIGHT_BROWSERS_PATH", "not set")
+logger.info(f"Playwright module loaded - browsers path: {browsers_path}")
 
 
 async def capture_webpage(
@@ -135,12 +134,12 @@ async def capture_webpage(
         finally:
             try:
                 await context.close()
-            except Exception:
-                pass
+            except Exception as e:
+                logger.debug(f"Error while closing browser context: {e}")
             try:
                 await browser.close()
-            except Exception:
-                pass
+            except Exception as e:
+                logger.debug(f"Error while closing browser: {e}")
 
 
 def capture_stub(url: str, artifact_type: str = "pdf") -> dict[str, Any]:

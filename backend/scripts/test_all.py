@@ -54,6 +54,8 @@ from typing import Any
 
 import httpx
 
+from app.main import app
+
 # Add the app directory to the Python path
 PROJECT_ROOT = Path(__file__).parent.parent
 sys.path.insert(0, str(PROJECT_ROOT))
@@ -344,9 +346,6 @@ class TestRunner:
         start_time = time.time()
 
         try:
-            # Import and test app creation
-            from app.main import app
-
             # Check if app is properly configured
             if not hasattr(app, "routes") or len(app.routes) == 0:
                 raise Exception("FastAPI app has no routes configured")

@@ -8,7 +8,7 @@ from typing import Any
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 
-from app.core.constants import MOCK_ADMIN_TOKEN
+from app.core.constants import DEV_ADMIN_EMAIL, DEV_ADMIN_PASSWORD, MOCK_ADMIN_TOKEN
 
 logger = logging.getLogger(__name__)
 router = APIRouter()
@@ -46,7 +46,7 @@ async def login(request: LoginRequest) -> LoginResponse:
         HTTPException: If authentication fails
     """
     # Development mock - accept demo credentials
-    if request.email == "admin@example.com" and request.password == "password":
+    if request.email == DEV_ADMIN_EMAIL and request.password == DEV_ADMIN_PASSWORD:
         # Mock JWT token for development
         mock_token = MOCK_ADMIN_TOKEN
 
