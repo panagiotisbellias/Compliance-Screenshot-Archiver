@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import logging
 import uuid
-from typing import Any, Optional
+from typing import Any
 
 from ..core.logging import jlog
 from ..storage.dynamo import CaptureData, create_capture
@@ -19,8 +19,8 @@ async def process_capture_request(
     url: str,
     artifact_type: str = "pdf",
     user_id: str = "system",
-    metadata: Optional[dict[str, Any]] = None,
-    capture_id: Optional[str] = None,  # Allow capture_id to be passed in
+    metadata: dict[str, Any] | None = None,
+    capture_id: str | None = None,  # Allow capture_id to be passed in
 ) -> dict[str, Any]:
     """
     Process a single capture request end-to-end.
@@ -67,8 +67,8 @@ async def process_capture_request(
             level="INFO",
         )
     except ImportError as e:
-        import sys
         import os
+        import sys
 
         error_msg = f"CRITICAL: Playwright import failed: {str(e)}"
         jlog(

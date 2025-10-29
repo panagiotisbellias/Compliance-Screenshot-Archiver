@@ -1,13 +1,11 @@
 from __future__ import annotations
 
-import asyncio
 import logging
 from typing import Any
 
 from fastapi import APIRouter, Depends, HTTPException, Query
 
 from ...auth.deps import require_operator
-from ...domain.models import CaptureOut
 
 router: APIRouter = APIRouter()
 logger = logging.getLogger(__name__)

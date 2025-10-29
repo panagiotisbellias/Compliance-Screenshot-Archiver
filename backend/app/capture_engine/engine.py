@@ -41,7 +41,7 @@ async def capture_webpage(
 
     async with async_playwright() as p:
         # Log available browsers
-        logger.info(f"Playwright context created, launching Chromium browser")
+        logger.info("Playwright context created, launching Chromium browser")
 
         # Use Chromium for consistency
         browser = await p.chromium.launch(

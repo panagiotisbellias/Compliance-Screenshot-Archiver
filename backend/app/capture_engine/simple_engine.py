@@ -2,19 +2,18 @@
 
 from __future__ import annotations
 
+import asyncio
 import hashlib
 import logging
-from typing import Any
-import asyncio
-from io import BytesIO
-import base64
 import re
+from io import BytesIO
+from typing import Any
 
 import httpx
-from reportlab.pdfgen import canvas
+from PIL import Image, ImageDraw, ImageFont
 from reportlab.lib.pagesizes import A4
 from reportlab.lib.utils import ImageReader
-from PIL import Image, ImageDraw, ImageFont
+from reportlab.pdfgen import canvas
 
 logger = logging.getLogger(__name__)
 
@@ -160,7 +159,7 @@ async def capture_webpage_simple(
     # Add footer with capture info
     p.setFont("Helvetica", 8)
     p.setFillColor("#666666")
-    p.drawString(20, 20, f"Captured via Simple HTTP Engine | SHA-256 will be calculated")
+    p.drawString(20, 20, "Captured via Simple HTTP Engine | SHA-256 will be calculated")
 
     p.save()
     artifact_data = buffer.getvalue()

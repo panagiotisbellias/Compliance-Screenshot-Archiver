@@ -3,8 +3,9 @@
 Setup script to create DynamoDB tables for local development.
 """
 
-import boto3
 import sys
+
+import boto3
 from botocore.exceptions import ClientError
 
 
