@@ -1,16 +1,26 @@
 from __future__ import annotations
 
+import json
 import logging
+import uuid
 from typing import Any
 
 from fastapi import APIRouter, Depends, HTTPException, Query
 
 from ...auth.deps import can_access_user_resource, require_operator, require_viewer
 
+# Import and use the capture processor directly
+from ...capture_engine.processor import process_capture_request
+
 # Removed direct import of processor to avoid Playwright dependency in API Lambda
 from ...domain.models import CaptureOut
-from ...storage.dynamo import delete_capture, get_capture, list_captures_by_user
-from ...storage.s3 import delete_object, presign_download
+from ...storage.dynamo import (
+    delete_capture,
+    get_capture,
+    get_capture_by_hash,
+    list_captures_by_user,
+)
+from ...storage.s3 import delete_object, presign_download, verify_object_lock
 
 router: APIRouter = APIRouter()
 logger = logging.getLogger(__name__)
@@ -43,8 +53,6 @@ async def list_captures(
     last_evaluated_key = None
     if last_key:
         try:
-            import json
-
             last_evaluated_key = json.loads(last_key)
         except (json.JSONDecodeError, ValueError) as e:
             raise HTTPException(status_code=400, detail="Invalid pagination token") from e
@@ -166,16 +174,11 @@ async def trigger_capture(
     Returns:
         dict: Completed capture details with download info.
     """
-    import uuid
-
     user_id = user_info.get("sub", "unknown")
     capture_id = str(uuid.uuid4())
 
     try:
         logger.info(f"Processing synchronous capture {capture_id} for {url}")
-
-        # Import and use the capture processor directly
-        from ...capture_engine.processor import process_capture_request
 
         result = await process_capture_request(
             url=url,
@@ -227,8 +230,6 @@ async def verify_capture(
     Returns:
         dict: Verification result.
     """
-    from ...storage.dynamo import get_capture_by_hash
-    from ...storage.s3 import verify_object_lock
 
     # Find capture by hash
     capture = get_capture_by_hash(sha256)
@@ -287,7 +288,8 @@ async def delete_capture_by_id(
         s3_deleted = delete_object(capture["s3_key"], version_id=version_id)
         if not s3_deleted:
             logger.warning(
-                f"Failed to delete S3 object for capture {capture_id}, continuing with DynamoDB deletion"
+                f"Failed to delete S3 object for capture {capture_id}, "
+                "continuing with DynamoDB deletion"
             )
 
         # Delete from DynamoDB

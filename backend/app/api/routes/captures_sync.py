@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import logging
+import uuid
 from typing import Any
 
 from fastapi import APIRouter, Depends, HTTPException, Query
@@ -31,8 +32,6 @@ async def trigger_capture_sync(
     Returns:
         dict: Capture result with download info.
     """
-    import uuid
-
     user_id = user_info.get("sub", "unknown")
     capture_id = str(uuid.uuid4())
 
