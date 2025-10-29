@@ -58,7 +58,7 @@ def get_schedule(schedule_id: str, _: dict[str, str] = _viewer_dep) -> ScheduleO
 
     Returns:
         ScheduleOut: Schedule details.
-    
+
     Raises:
         HTTPException: If schedule not found.
     """
@@ -69,9 +69,7 @@ def get_schedule(schedule_id: str, _: dict[str, str] = _viewer_dep) -> ScheduleO
 
 @router.put("/{schedule_id}", response_model=ScheduleOut)
 def update_schedule(
-    schedule_id: str, 
-    payload: Dict[str, Any], 
-    _: dict[str, str] = _operator_dep
+    schedule_id: str, payload: Dict[str, Any], _: dict[str, str] = _operator_dep
 ) -> ScheduleOut:
     """
     Update a schedule.
@@ -82,21 +80,21 @@ def update_schedule(
 
     Returns:
         ScheduleOut: Updated schedule.
-    
+
     Raises:
         HTTPException: If schedule not found.
     """
     if schedule_id not in _SCHEDULES:
         raise HTTPException(status_code=404, detail="Schedule not found")
-    
+
     current = _SCHEDULES[schedule_id]
-    
+
     # Update only provided fields
     update_data = current.model_dump()
     for key, value in payload.items():
         if key in update_data and key != "id":  # Don't allow ID changes
             update_data[key] = value
-    
+
     updated_schedule = ScheduleOut(**update_data)
     _SCHEDULES[schedule_id] = updated_schedule
     return updated_schedule
@@ -109,7 +107,7 @@ def delete_schedule(schedule_id: str, _: dict[str, str] = _operator_dep) -> Dict
 
     Args:
         schedule_id (str): Schedule ID.
-    
+
     Raises:
         HTTPException: If schedule not found.
     """

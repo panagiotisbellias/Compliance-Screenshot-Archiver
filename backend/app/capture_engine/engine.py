@@ -84,7 +84,7 @@ async def capture_webpage(
         try:
             # Navigate to URL with more robust loading strategy
             logger.info(f"Navigating to {url}")
-            
+
             try:
                 # First try networkidle with shorter timeout
                 await page.goto(url, wait_until="networkidle", timeout=15000)
@@ -104,12 +104,7 @@ async def capture_webpage(
                 artifact_data = await page.pdf(
                     format="A4",
                     print_background=True,
-                    margin={
-                        "top": "1cm",
-                        "right": "1cm",
-                        "bottom": "1cm",
-                        "left": "1cm"
-                    },
+                    margin={"top": "1cm", "right": "1cm", "bottom": "1cm", "left": "1cm"},
                     prefer_css_page_size=False,
                 )
                 logger.info(f"Generated PDF for {url}, size: {len(artifact_data)} bytes")

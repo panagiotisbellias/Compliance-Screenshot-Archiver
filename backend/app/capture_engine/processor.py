@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import logging
 import uuid
-from typing import Any
+from typing import Any, Optional
 
 from ..core.logging import jlog
 from ..storage.dynamo import CaptureData, create_capture
@@ -19,8 +19,8 @@ async def process_capture_request(
     url: str,
     artifact_type: str = "pdf",
     user_id: str = "system",
-    metadata: dict[str, Any] = None,
-    capture_id: str = None,  # Allow capture_id to be passed in
+    metadata: Optional[dict[str, Any]] = None,
+    capture_id: Optional[str] = None,  # Allow capture_id to be passed in
 ) -> dict[str, Any]:
     """
     Process a single capture request end-to-end.
